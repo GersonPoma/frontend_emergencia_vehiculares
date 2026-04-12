@@ -41,16 +41,9 @@
                 formControlName="password"
                 placeholder="Ingresa tu contraseña"
               />
-              <button 
-                mat-icon-button 
-                matSuffix 
-                (click)="togglePasswordVisibility()" 
-                type="button"
-              >
-                <mat-icon>
-                  {{ hidePassword ? 'visibility_off' : 'visibility' }}
-                </mat-icon>
-              </button>
+              <mat-icon matSuffix (click)="togglePasswordVisibility()" style="cursor:pointer">
+                {{ hidePassword ? 'visibility_off' : 'visibility' }}
+              </mat-icon>
               <mat-error *ngIf="f['password']?.hasError('required')">
                 La contraseña es requerida
               </mat-error>
