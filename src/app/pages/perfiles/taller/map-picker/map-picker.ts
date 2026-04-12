@@ -2,7 +2,9 @@ import { Component, OnDestroy, Inject, ElementRef, ViewChild, AfterViewInit, NgZ
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { GoogleMapsModule } from '@angular/google-maps';
+import { environment } from '../../../../../environments/environment';
 
 declare var google: any;
 
@@ -13,6 +15,7 @@ declare var google: any;
     MatButtonModule,
     MatIconModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
     GoogleMapsModule
   ],
   template: `
@@ -28,17 +31,23 @@ declare var google: any;
                outline:none; font-family:Roboto,sans-serif;"
       />
 
-      <google-map
-        width="100%"
-        height="380px"
-        [center]="center"
-        [zoom]="zoom"
-        [options]="mapOptions"
-        (mapClick)="onMapClick($event)">
-        @if (markerPosition) {
-          <map-marker [position]="markerPosition" [options]="markerOptions"></map-marker>
-        }
-      </google-map>
+      @if (mapsLoaded) {
+        <google-map
+          width="100%"
+          height="380px"
+          [center]="center"
+          [zoom]="zoom"
+          [options]="mapOptions"
+          (mapClick)="onMapClick($event)">
+          @if (markerPosition) {
+            <map-marker [position]="markerPosition" [options]="markerOptions"></map-marker>
+          }
+        </google-map>
+      } @else {
+        <div style="width:100%; height:380px; display:flex; align-items:center; justify-content:center; background:#f5f5f5; border-radius:4px;">
+          <mat-spinner diameter="40"></mat-spinner>
+        </div>
+      }
 
       @if (lat !== null && lng !== null) {
         <p style="margin:8px 0 0; font-size:13px; color:#555; text-align:center;">
@@ -59,6 +68,7 @@ declare var google: any;
 export class MapPickerComponent implements AfterViewInit, OnDestroy {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
+  mapsLoaded = false;
   lat: number | null = null;
   lng: number | null = null;
   markerPosition: google.maps.LatLngLiteral | null = null;
@@ -82,7 +92,27 @@ export class MapPickerComponent implements AfterViewInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: { lat?: number; lng?: number }
   ) {}
 
+  private loadGoogleMapsScript(): Promise<void> {
+    return new Promise((resolve) => {
+      if (typeof google !== 'undefined') { resolve(); return; }
+      const script = document.createElement('script');
+      script.src = `https://maps.googleapis.com/maps/api/js?key=${environment.googleMapsApiKey}&libraries=places`;
+      script.async = true;
+      script.defer = true;
+      script.onload = () => resolve();
+      document.head.appendChild(script);
+    });
+  }
+
   ngAfterViewInit(): void {
+    this.loadGoogleMapsScript().then(() => {
+      this.mapsLoaded = true;
+      this.cdr.detectChanges();
+      this.initMap();
+    });
+  }
+
+  private initMap(): void {
     // Si ya hay coordenadas, centrar ahí
     if (this.data?.lat && this.data?.lng) {
       this.lat = this.data.lat;

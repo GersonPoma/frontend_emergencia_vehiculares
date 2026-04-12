@@ -50,7 +50,28 @@ cd frontend_emergencia_vehiculares
 npm install
 ```
 
-### 3. Ejecutar servidor de desarrollo
+### 3. Configurar archivos de entorno
+
+Los archivos `environment.ts` y `environment.prod.ts` **no están en el repositorio** (están en `.gitignore` porque contienen API keys). Debes crearlos manualmente a partir del archivo de ejemplo:
+
+```bash
+cp src/environments/environment.example.ts src/environments/environment.ts
+cp src/environments/environment.example.ts src/environments/environment.prod.ts
+```
+
+Luego edita `src/environments/environment.ts` y reemplaza los valores:
+
+```typescript
+export const environment = {
+  production: false,
+  apiBaseUrl: 'http://localhost:8000',
+  googleMapsApiKey: 'TU_GOOGLE_MAPS_API_KEY'
+};
+```
+
+> Obtén tu API key en [Google Cloud Console](https://console.cloud.google.com/). Debes habilitar las APIs: **Maps JavaScript API** y **Places API**.
+
+### 4. Ejecutar servidor de desarrollo
 
 ```bash
 ng serve
