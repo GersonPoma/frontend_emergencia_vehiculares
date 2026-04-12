@@ -1,0 +1,63 @@
+<h2 mat-dialog-title>
+  Privilegios del Rol: <strong>{{ data.rol.nombre }}</strong>
+</h2>
+
+<mat-dialog-content style="min-width: 420px;">
+
+  @if (isLoading) {
+    <div style="display: flex; justify-content: center; padding: 32px;">
+      <mat-spinner diameter="40"></mat-spinner>
+    </div>
+  }
+
+  @if (!isLoading) {
+    <p style="font-size: 13px; color: #666; margin-bottom: 12px;">
+      {{ asignadosCount }} de {{ privilegios.length }} privilegios asignados
+    </p>
+
+    <div style="max-height: 380px; overflow-y: auto; border: 1px solid #e0e0e0; border-radius: 6px;">
+      @for (item of privilegios; track item.id) {
+        <div
+          style="display: flex; align-items: flex-start; padding: 10px 16px; border-bottom: 1px solid #f0f0f0; cursor: pointer;"
+          (click)="togglePrivilegio(item)">
+          <mat-checkbox
+            [checked]="item.asignado"
+            (click)="$event.stopPropagation()"
+            (change)="togglePrivilegio(item)"
+            style="margin-right: 12px; margin-top: 2px;">
+          </mat-checkbox>
+          <div>
+            <div style="font-weight: 500; font-size: 14px;">{{ item.nombre }}</div>
+            @if (item.descripcion) {
+              <div style="font-size: 12px; color: #999; margin-top: 2px;">{{ item.descripcion }}</div>
+            }
+          </div>
+        </div>
+      } @empty {
+        <div style="text-align: center; padding: 32px; color: #999;">
+          <mat-icon style="font-size: 36px; width: 36px; height: 36px;">lock_open</mat-icon>
+          <p>No hay privilegios disponibles</p>
+        </div>
+      }
+    </div>
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="isSaving">Cancelar</button>
+  <button
+    mat-raised-button
+    color="primary"
+    (click)="guardar()"
+    [disabled]="isSaving || !hayDiferencias">
+    @if (!isSaving) {
+      Guardar cambios
+    } @else {
+      <span style="display: flex; align-items: center; gap: 8px;">
+        <mat-spinner diameter="16"></mat-spinner>
+        Guardando...
+      </span>
+    }
+  </button>
+</mat-dialog-actions>

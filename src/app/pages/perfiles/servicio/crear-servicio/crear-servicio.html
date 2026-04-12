@@ -1,0 +1,36 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Editar Servicio' : 'Nuevo Servicio' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" style="display:flex; flex-direction:column; gap:4px; padding-top:8px;">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tipo de Servicio</mat-label>
+      <input matInput formControlName="tipo_servicio" />
+      @if (f['tipo_servicio'].errors?.['required'] && f['tipo_servicio'].touched) {
+        <mat-error>El tipo de servicio es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Precio (Bs.)</mat-label>
+      <input matInput type="number" step="0.01" min="0" formControlName="precio" />
+      @if (f['precio'].errors?.['required'] && f['precio'].touched) {
+        <mat-error>El precio es requerido</mat-error>
+      }
+      @if (f['precio'].errors?.['min'] && f['precio'].touched) {
+        <mat-error>El precio no puede ser negativo</mat-error>
+      }
+    </mat-form-field>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="form.invalid || isLoading">
+    @if (isLoading) {
+      <mat-spinner diameter="18" style="display:inline-block; margin-right:6px;"></mat-spinner>
+    }
+    {{ isEditing ? 'Actualizar' : 'Crear' }}
+  </button>
+</mat-dialog-actions>

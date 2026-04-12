@@ -1,0 +1,79 @@
+<h2 mat-dialog-title>
+  {{ isEditMode ? 'Editar Usuario: ' + data.usuario.username : 'Crear Nuevo Usuario' }}
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" style="display: flex; flex-direction: column; gap: 8px; margin-top: 12px;">
+
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" placeholder="Ej: admin, operador1" />
+      <mat-error *ngIf="form.get('username')?.hasError('required')">El username es requerido</mat-error>
+      <mat-error *ngIf="form.get('username')?.hasError('minlength')">Mínimo 3 caracteres</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" style="width: 100%;">
+      <mat-label>Contraseña</mat-label>
+      <input
+        matInput
+        type="password"
+        formControlName="password"
+        [placeholder]="isEditMode ? 'Dejar en blanco para no cambiar' : 'Ingresa una contraseña'"
+      />
+      <mat-error *ngIf="form.get('password')?.hasError('required')">La contraseña es requerida</mat-error>
+      <mat-error *ngIf="form.get('password')?.hasError('minlength')">Mínimo 6 caracteres</mat-error>
+    </mat-form-field>
+
+    <!-- Selección de Rol -->
+    <div style="margin-top: 8px;">
+      <label style="display: block; font-weight: 500; font-size: 14px; margin-bottom: 8px;">
+        {{ isEditMode ? 'Cambiar Rol:' : 'Selecciona un Rol:' }}
+      </label>
+
+      <div *ngIf="isLoading" style="display: flex; justify-content: center; padding: 16px;">
+        <mat-spinner diameter="30"></mat-spinner>
+      </div>
+
+      <mat-selection-list
+        (selectionChange)="onRolSelected($event)"
+        style="max-height: 250px; overflow-y: auto; border: 1px solid #ccc; border-radius: 4px;">
+        <mat-list-option
+          *ngFor="let rol of roles"
+          [value]="rol.id"
+          [selected]="form.get('rol_id')?.value === rol.id">
+          {{ rol.nombre }}
+        </mat-list-option>
+      </mat-selection-list>
+
+      <mat-error *ngIf="form.get('rol_id')?.invalid && form.get('rol_id')?.touched"
+        style="font-size: 12px; margin-top: 4px;">
+        Debes seleccionar un rol
+      </mat-error>
+
+      <!-- Paginación de roles -->
+      <div style="display: flex; gap: 8px; margin-top: 8px; justify-content: space-between; align-items: center;">
+        <button mat-stroked-button [disabled]="rolesPagina <= 1 || isLoading" (click)="previousRolesPage()" type="button">
+          <mat-icon>arrow_back</mat-icon> Anterior
+        </button>
+        <span style="font-size: 12px; color: #666;">
+          Página {{ rolesPagina }} de {{ rolesTotalPaginas }} ({{ rolesTotalItems }} total)
+        </span>
+        <button mat-stroked-button [disabled]="rolesPagina >= rolesTotalPaginas || isLoading" (click)="nextRolesPage()" type="button">
+          Siguiente <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-raised-button color="primary" (click)="guardar()" [disabled]="isSaving || form.invalid">
+    <span *ngIf="!isSaving">{{ isEditMode ? 'Actualizar' : 'Guardar' }}</span>
+    <span *ngIf="isSaving" style="display: flex; align-items: center; gap: 8px;">
+      <mat-spinner diameter="16"></mat-spinner>
+      {{ isEditMode ? 'Actualizando...' : 'Guardando...' }}
+    </span>
+  </button>
+</mat-dialog-actions>

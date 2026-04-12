@@ -1,0 +1,68 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Editar Técnico' : 'Nuevo Técnico' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" style="display:flex; flex-direction:column; gap:4px; padding-top:8px;">
+
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" />
+      @if (f['nombre'].errors?.['required'] && f['nombre'].touched) {
+        <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Apellido</mat-label>
+      <input matInput formControlName="apellido" />
+      @if (f['apellido'].errors?.['required'] && f['apellido'].touched) {
+        <mat-error>El apellido es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Teléfono</mat-label>
+      <input matInput formControlName="telefono" />
+      @if (f['telefono'].errors?.['required'] && f['telefono'].touched) {
+        <mat-error>El teléfono es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    @if (!isEditing) {
+      <mat-form-field appearance="outline">
+        <mat-label>Usuario</mat-label>
+        <input matInput formControlName="username" />
+        @if (f['username'].errors?.['required'] && f['username'].touched) {
+          <mat-error>El usuario es requerido</mat-error>
+        }
+        @if (f['username'].errors?.['minlength'] && f['username'].touched) {
+          <mat-error>Mínimo 3 caracteres</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Contraseña</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" />
+        <mat-icon matSuffix (click)="hidePassword = !hidePassword" style="cursor:pointer">
+          {{ hidePassword ? 'visibility_off' : 'visibility' }}
+        </mat-icon>
+        @if (f['password'].errors?.['required'] && f['password'].touched) {
+          <mat-error>La contraseña es requerida</mat-error>
+        }
+        @if (f['password'].errors?.['minlength'] && f['password'].touched) {
+          <mat-error>Mínimo 6 caracteres</mat-error>
+        }
+      </mat-form-field>
+    }
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()">Cancelar</button>
+  <button mat-flat-button color="primary" (click)="submit()" [disabled]="form.invalid || isLoading">
+    @if (isLoading) {
+      <mat-spinner diameter="18" style="display:inline-block; margin-right:6px;"></mat-spinner>
+    }
+    {{ isEditing ? 'Actualizar' : 'Crear' }}
+  </button>
+</mat-dialog-actions>

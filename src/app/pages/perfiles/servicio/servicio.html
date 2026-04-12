@@ -1,0 +1,70 @@
+<mat-card>
+  <mat-card-header>
+    <div style="display:flex; justify-content:space-between; align-items:center; width:100%; padding:16px;">
+      <mat-card-title>Gestión de Servicios</mat-card-title>
+      <button mat-raised-button color="primary" (click)="crearServicio()">
+        <mat-icon>add</mat-icon>
+        @if (!isMobile) { Nuevo Servicio }
+      </button>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (isLoading) {
+      <div style="display:flex; justify-content:center; padding:40px;">
+        <mat-spinner diameter="50"></mat-spinner>
+      </div>
+    }
+
+    @if (!isLoading && dataSource.length > 0) {
+      <table mat-table [dataSource]="dataSource" class="w-full">
+
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>ID</th>
+          <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="tipo_servicio">
+          <th mat-header-cell *matHeaderCellDef>Tipo de Servicio</th>
+          <td mat-cell *matCellDef="let element">{{ element.tipo_servicio }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="precio">
+          <th mat-header-cell *matHeaderCellDef>Precio (Bs.)</th>
+          <td mat-cell *matCellDef="let element">{{ element.precio | number:'1.2-2' }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="acciones">
+          <th mat-header-cell *matHeaderCellDef>Acciones</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button matTooltip="Editar" (click)="editarServicio(element)" color="primary">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button matTooltip="Eliminar" (click)="eliminarServicio(element)" color="warn">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    }
+
+    @if (!isLoading && dataSource.length === 0) {
+      <div style="text-align:center; padding:40px;">
+        <mat-icon style="font-size:48px; width:48px; height:48px; color:#ccc;">build</mat-icon>
+        <p style="color:#999; margin-top:16px;">No hay servicios registrados</p>
+      </div>
+    }
+
+    @if (dataSource.length > 0) {
+      <mat-paginator
+        [length]="totalItems"
+        [pageSize]="pageSize"
+        hidePageSize="true"
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    }
+  </mat-card-content>
+</mat-card>
