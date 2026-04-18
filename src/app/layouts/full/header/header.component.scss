@@ -7,10 +7,16 @@
   align-items: center;
   gap: 8px;
   margin-right: 16px;
-  
+
   .username-text {
     margin: 0 4px;
     font-size: 14px;
+  }
+}
+
+@media (max-width: 600px) {
+  .user-menu-button .username-text {
+    display: none;
   }
 }
 

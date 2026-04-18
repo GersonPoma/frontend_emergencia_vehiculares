@@ -17,6 +17,7 @@
     }
 
     @if (!isLoading && dataSource.length > 0) {
+      <div class="table-scroll-wrapper">
       <table mat-table [dataSource]="dataSource" class="w-full">
 
         <ng-container matColumnDef="id">
@@ -49,6 +50,7 @@
         <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
+      </div>
     }
 
     @if (!isLoading && dataSource.length === 0) {

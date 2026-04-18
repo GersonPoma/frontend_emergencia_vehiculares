@@ -51,7 +51,7 @@
       </mat-error>
 
       <!-- Paginación de roles -->
-      <div style="display: flex; gap: 8px; margin-top: 8px; justify-content: space-between; align-items: center;">
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; justify-content: space-between; align-items: center;">
         <button mat-stroked-button [disabled]="rolesPagina <= 1 || isLoading" (click)="previousRolesPage()" type="button">
           <mat-icon>arrow_back</mat-icon> Anterior
         </button>

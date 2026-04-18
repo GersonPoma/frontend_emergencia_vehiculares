@@ -79,6 +79,7 @@ export class RegistrarTallerComponent implements OnDestroy {
     const dialogRef = this.dialog.open(MapPickerComponent, {
       width: '600px',
       maxWidth: '95vw',
+      maxHeight: '90vh',
       data: {
         lat: this.f['latitud'].value,
         lng: this.f['longitud'].value

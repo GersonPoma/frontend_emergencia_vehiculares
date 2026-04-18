@@ -7,3 +7,41 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .pac-container {
   z-index: 9999 !important;
 }
+
+/* Tablas con scroll horizontal en móvil */
+.table-scroll-wrapper {
+  overflow-x: auto;
+  width: 100%;
+}
+
+/* Diálogos responsivos */
+@media (max-width: 600px) {
+  .mat-mdc-dialog-surface {
+    max-height: 95vh !important;
+    overflow-y: auto !important;
+  }
+
+  .mat-mdc-dialog-content {
+    max-height: 60vh !important;
+    overflow-y: auto !important;
+    padding: 12px 16px !important;
+  }
+
+  .mat-mdc-dialog-title {
+    padding: 16px 16px 8px !important;
+    font-size: 16px !important;
+  }
+
+  .mat-mdc-dialog-actions {
+    padding: 8px 16px !important;
+  }
+
+  /* mat-card con menos padding en móvil */
+  .mat-mdc-card-content {
+    padding: 8px !important;
+  }
+
+  .mat-mdc-card-header {
+    padding: 8px !important;
+  }
+}

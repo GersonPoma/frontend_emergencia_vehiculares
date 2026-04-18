@@ -73,10 +73,34 @@ h3 { font-weight: 600; margin: 12px 0 16px; }
 }
 
 @media (max-width: 600px) {
-  .login-card { max-width: 100%; }
-  .p-32 { padding: 20px; }
+  .login-container {
+    padding: 16px;
+    align-items: flex-start;
+  }
+
+  .login-card {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .p-32 {
+    padding: 16px;
+  }
+
+  .cardWithShadow {
+    border-radius: 12px;
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
   .d-flex.gap-2 {
     flex-direction: column;
-    .w-50 { width: 100%; }
+    gap: 0;
+
+    .w-50 {
+      width: 100%;
+    }
   }
 }

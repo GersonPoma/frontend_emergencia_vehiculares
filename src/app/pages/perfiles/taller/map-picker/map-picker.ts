@@ -34,7 +34,7 @@ declare var google: any;
       @if (mapsLoaded) {
         <google-map
           width="100%"
-          height="380px"
+          [height]="mapHeight"
           [center]="center"
           [zoom]="zoom"
           [options]="mapOptions"
@@ -44,7 +44,7 @@ declare var google: any;
           }
         </google-map>
       } @else {
-        <div style="width:100%; height:380px; display:flex; align-items:center; justify-content:center; background:#f5f5f5; border-radius:4px;">
+        <div [style.height]="mapHeight" style="width:100%; display:flex; align-items:center; justify-content:center; background:#f5f5f5; border-radius:4px;">
           <mat-spinner diameter="40"></mat-spinner>
         </div>
       }
@@ -71,6 +71,10 @@ export class MapPickerComponent implements AfterViewInit, OnDestroy {
   mapsLoaded = false;
   lat: number | null = null;
   lng: number | null = null;
+
+  get mapHeight(): string {
+    return window.innerWidth < 600 ? '220px' : '380px';
+  }
   markerPosition: google.maps.LatLngLiteral | null = null;
   center: google.maps.LatLngLiteral = { lat: -16.5000, lng: -68.1500 };
   zoom = 13;

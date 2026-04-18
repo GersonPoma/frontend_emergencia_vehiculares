@@ -128,17 +128,43 @@ h3 {
   stroke: white !important;
 }
 
+.forgot-password-wrapper {
+  text-align: center;
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
 // Responsive para mobile
 @media (max-width: 600px) {
   .login-container {
-    padding: 20px;
+    padding: 16px;
+    align-items: flex-start;
+    padding-top: 40px;
   }
 
-  .p-32 {
-    padding: 24px;
+  .login-wrapper {
+    align-items: flex-start;
   }
 
   .login-card {
     max-width: 100%;
+    padding: 0;
+  }
+
+  .p-32 {
+    padding: 20px 16px;
+  }
+
+  .cardWithShadow {
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  h3 {
+    font-size: 18px;
+  }
+
+  mat-form-field {
+    margin-bottom: 8px;
   }
 }

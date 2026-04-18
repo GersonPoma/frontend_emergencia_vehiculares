@@ -13,8 +13,16 @@
 @media (max-width: 991px) {
   .mat-drawer.sidebarNav {
     position: fixed;
-    top: 70px;
-    z-index: 999;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    max-height: 100vh;
+    width: min(86vw, 320px);
+    z-index: 1200;
+  }
+
+  .mat-drawer-backdrop.mat-drawer-shown {
+    z-index: 1199;
   }
 }
 
@@ -170,7 +178,7 @@
 .flex-layout {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100%;
 }
 
 .side-img {
