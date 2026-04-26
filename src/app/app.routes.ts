@@ -57,6 +57,12 @@ export const routes: Routes = [
         loadChildren: () =>
           import('./pages/extra/extra.routes').then((m) => m.ExtraRoutes),
       },
+      {
+        path: 'notificaciones',
+        loadComponent: () =>
+          import('./pages/notificaciones/notificaciones').then((m) => m.NotificacionesComponent),
+        data: { title: 'Notificaciones' }
+      },
     ],
   },
   {

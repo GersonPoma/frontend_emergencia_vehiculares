@@ -27,6 +27,14 @@ export const navItems: NavItem[] = [
     iconName: 'solar:settings-minimalistic-line-duotone',
     route: '/perfiles/servicios',
   },
+  {
+    navCap: 'Notificaciones',
+  },
+  {
+    displayName: 'Notificaciones',
+    iconName: 'solar:bell-line-duotone',
+    route: '/notificaciones',
+  },
   // {
   //   navCap: 'Home',
   // },

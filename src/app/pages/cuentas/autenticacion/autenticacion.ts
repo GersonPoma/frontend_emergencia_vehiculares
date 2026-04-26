@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
+import { FirebaseMessagingService } from '../../../services/firebase-messaging.service';
 
 @Component({
   selector: 'app-autenticacion',
@@ -51,7 +52,8 @@ export class Autenticacion implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private authService: AuthService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private firebaseMessaging: FirebaseMessagingService
   ) {}
 
   ngOnInit(): void {
@@ -100,8 +102,9 @@ export class Autenticacion implements OnInit, OnDestroy {
     this.authService.login(credentials)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => {
+        next: (response) => {
           this.isLoading = false;
+          this.firebaseMessaging.solicitarPermisoYRegistrarToken(response.id_usuario);
           this.snackBar.open(`¡Bienvenido ${this.form.value.username}!`, 'Cerrar', {
             duration: 3000
           });

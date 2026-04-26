@@ -1,31 +1,79 @@
 <mat-toolbar class="topbar">
-  <button mat-icon-button aria-label="Toggle Menu" (click)="toggleMobileNav.emit()" 
+  <button mat-icon-button aria-label="Toggle Menu" (click)="toggleMobileNav.emit()"
     class="d-flex justify-content-center">
     <i class="iconify icon-20" data-icon="solar:hamburger-menu-line-duotone"></i>
   </button>
 
-  <!-- Spacer para empujar el menú de usuario a la derecha -->
   <span class="spacer"></span>
 
+  <!-- Campana de emergencias -->
+  <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="notif-btn"
+    [matBadge]="cantidadPendientes() || null" matBadgeColor="warn" matBadgeSize="small">
+    <mat-icon>notifications</mat-icon>
+  </button>
+
+  <!-- Dropdown emergencias pendientes -->
+  <mat-menu #notifMenu="matMenu" class="notif-dropdown">
+    <div class="notif-dropdown-header" (click)="$event.stopPropagation()">
+      <span class="notif-dropdown-title">Emergencias pendientes</span>
+      @if (cantidadPendientes() > 0) {
+        <span class="notif-count-chip">{{ cantidadPendientes() }}</span>
+      }
+    </div>
+    <mat-divider></mat-divider>
+
+    @if (pendientes().length === 0) {
+      <div class="notif-empty" (click)="$event.stopPropagation()">
+        <mat-icon>notifications_none</mat-icon>
+        <span>Sin emergencias pendientes</span>
+      </div>
+    }
+
+    @for (asig of pendientes(); track asig.id) {
+      <div class="notif-drop-item" (click)="$event.stopPropagation()">
+        <div class="notif-drop-icon asignacion">
+          <mat-icon>build</mat-icon>
+        </div>
+        <div class="notif-drop-body">
+          <div class="notif-drop-titulo">
+            Emergencia #{{ asig.incidente_id }}
+            <span class="punto"></span>
+          </div>
+          <div class="notif-drop-cuerpo">
+            {{ asig.distancia_km | number:'1.1-1' }} km de distancia
+          </div>
+          <div class="notif-drop-actions">
+            <button mat-stroked-button color="primary" class="btn-action"
+              (click)="aceptar(asig, $event)">
+              Aceptar
+            </button>
+            <button mat-stroked-button color="warn" class="btn-action"
+              (click)="rechazar(asig, $event)">
+              Rechazar
+            </button>
+          </div>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
+    }
+
+    <a mat-menu-item [routerLink]="['/notificaciones']" class="ver-todas">
+      <mat-icon>open_in_new</mat-icon>
+      Ver todas las emergencias
+    </a>
+  </mat-menu>
+
   <!-- Menú de Usuario -->
-  <button 
-    mat-button 
-    [matMenuTriggerFor]="userMenu"
-    class="user-menu-button">
+  <button mat-button [matMenuTriggerFor]="userMenu" class="user-menu-button">
     <mat-icon>account_circle</mat-icon>
     <span class="username-text">{{ currentUsername }}</span>
     <mat-icon>arrow_drop_down</mat-icon>
   </button>
 
-  <!-- Menú Desplegable -->
   <mat-menu #userMenu="matMenu">
     <button mat-menu-item>
       <mat-icon>person</mat-icon>
       <span>Mi Perfil</span>
-    </button>
-    <button mat-menu-item>
-      <mat-icon>settings</mat-icon>
-      <span>Configuración</span>
     </button>
     <mat-divider></mat-divider>
     <button mat-menu-item (click)="cerrarSesion()" class="logout-button">

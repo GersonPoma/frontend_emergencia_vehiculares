@@ -27,6 +27,7 @@
     "@tailwindcss/postcss": "^4.1.18",
     "angular-tabler-icons": "^3.26.0",
     "apexcharts": "^4.7.0",
+    "firebase": "^12.12.1",
     "iconify": "^1.4.0",
     "ng-apexcharts": "^1.16.0",
     "ngx-scrollbar": "^18.0.0",
