@@ -22,7 +22,6 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificacionService } from 'src/app/services/notificacion.service';
-import { FirebaseMessagingService } from 'src/app/services/firebase-messaging.service';
 import { AsignacionPendiente } from 'src/app/models/asignacion-pendiente.model';
 
 @Component({
@@ -50,9 +49,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleMobileNav = new EventEmitter<void>();
 
   currentUsername = '';
-  private currentTallerId: number | null = null;
   private destroy$ = new Subject<void>();
-  private unsubscribeForeground?: () => void;
 
   readonly pendientes: Signal<AsignacionPendiente[]>;
   readonly cantidadPendientes: Signal<number>;
@@ -60,8 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private notificacionService: NotificacionService,
-    private firebaseMessaging: FirebaseMessagingService
+    private notificacionService: NotificacionService
   ) {
     this.pendientes = this.notificacionService.pendientes.asReadonly();
     this.cantidadPendientes = this.notificacionService.cantidadPendientes;
@@ -70,18 +66,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const state = this.authService.getCurrentAuthState();
     this.currentUsername = state.username || 'Usuario';
-    this.currentTallerId = state.id_taller;
-
-    if (this.currentTallerId) {
-      this.notificacionService.iniciarPolling(this.currentTallerId);
-      this.unsubscribeForeground = this.firebaseMessaging.escucharMensajesForeground(
-        this.currentTallerId
-      );
-    }
   }
 
   ngOnDestroy(): void {
-    this.unsubscribeForeground?.();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -113,7 +100,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   cerrarSesion(): void {
     this.notificacionService.detenerPolling();
-    this.unsubscribeForeground?.();
     this.authService
       .logout()
       .pipe(takeUntil(this.destroy$))

@@ -45,3 +45,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     padding: 8px !important;
   }
 }
+
+/* Toast para notificaciones de emergencia en foreground */
+.fcm-snackbar {
+  --mdc-snackbar-container-color: #0b57d0;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-mdc-snack-bar-button-color: #ffffff;
+}

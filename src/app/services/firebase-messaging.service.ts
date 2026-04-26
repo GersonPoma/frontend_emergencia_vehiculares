@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { initializeApp, getApps } from 'firebase/app';
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { take } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { NotificacionService } from './notificacion.service';
 
@@ -11,11 +13,15 @@ export class FirebaseMessagingService {
     const app = getApps().length ? getApps()[0] : initializeApp(environment.firebaseConfig);
     return getMessaging(app);
   })();
+  private audioContext: AudioContext | null = null;
 
   constructor(
     private snackBar: MatSnackBar,
-    private notificacionService: NotificacionService
-  ) {}
+    private notificacionService: NotificacionService,
+    private router: Router
+  ) {
+    this.inicializarUnlockDeAudio();
+  }
 
   async solicitarPermisoYRegistrarToken(usuarioId: number): Promise<void> {
     try {
@@ -42,10 +48,92 @@ export class FirebaseMessagingService {
   // Retorna la función de unsubscribe para llamar en ngOnDestroy
   escucharMensajesForeground(tallerId: number): () => void {
     return onMessage(this.messaging, payload => {
+      this.reproducirSonidoForeground();
       const title = payload.notification?.title ?? 'Nueva emergencia';
       const body = payload.notification?.body ?? '';
-      this.snackBar.open(`${title}: ${body}`, 'Ver', { duration: 5000 });
+      const message = body ? `${title}: ${body}` : title;
+      this.snackBar.open(message, 'Ver', {
+        duration: 6000,
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        panelClass: ['fcm-snackbar']
+      }).onAction().pipe(take(1)).subscribe(() => {
+        void this.router.navigate(['/notificaciones']);
+      });
       this.notificacionService.cargarPendientes(tallerId).subscribe();
     });
+  }
+
+  private inicializarUnlockDeAudio(): void {
+    if (typeof window === 'undefined') return;
+
+    const unlock = () => {
+      void this.intentarActivarAudio();
+    };
+
+    window.addEventListener('pointerdown', unlock, { once: true });
+    window.addEventListener('keydown', unlock, { once: true });
+  }
+
+  private obtenerAudioContext(): AudioContext | null {
+    if (typeof window === 'undefined') return null;
+    if (this.audioContext) return this.audioContext;
+
+    const windowWithWebkit = window as Window & {
+      webkitAudioContext?: typeof AudioContext;
+    };
+    const globalWithAudio = globalThis as typeof globalThis & {
+      AudioContext?: typeof AudioContext;
+    };
+    const AudioContextCtor = globalWithAudio.AudioContext ?? windowWithWebkit.webkitAudioContext;
+
+    if (!AudioContextCtor) return null;
+
+    this.audioContext = new AudioContextCtor();
+    return this.audioContext;
+  }
+
+  private async intentarActivarAudio(): Promise<void> {
+    const ctx = this.obtenerAudioContext();
+    if (!ctx) return;
+
+    if (ctx.state === 'suspended') {
+      try {
+        await ctx.resume();
+      } catch {
+        // Ignorar bloqueos del navegador; se reintentara al llegar una notificacion.
+      }
+    }
+  }
+
+  private reproducirSonidoForeground(): void {
+    const ctx = this.obtenerAudioContext();
+    if (!ctx) return;
+
+    const beep = () => {
+      // Beep corto y limpio para alertar sin ser invasivo.
+      const now = ctx.currentTime;
+      const oscillator = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      oscillator.type = 'sine';
+      oscillator.frequency.setValueAtTime(880, now);
+
+      gain.gain.setValueAtTime(0.0001, now);
+      gain.gain.exponentialRampToValueAtTime(0.12, now + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.25);
+
+      oscillator.connect(gain);
+      gain.connect(ctx.destination);
+      oscillator.start(now);
+      oscillator.stop(now + 0.26);
+    };
+
+    if (ctx.state === 'suspended') {
+      void ctx.resume().then(beep).catch(() => {});
+      return;
+    }
+
+    beep();
   }
 }

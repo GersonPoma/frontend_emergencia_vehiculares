@@ -3,6 +3,9 @@ import { Component, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { MatSidenav, MatSidenavContent } from '@angular/material/sidenav';
 import { CoreService } from 'src/app/services/core.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { NotificacionService } from 'src/app/services/notificacion.service';
+import { FirebaseMessagingService } from 'src/app/services/firebase-messaging.service';
 
 import { filter } from 'rxjs/operators';
 import { NavigationEnd, Router } from '@angular/router';
@@ -42,6 +45,7 @@ export class FullComponent implements OnInit {
   options = this.settings.getOptions();
   private layoutChangesSubscription = Subscription.EMPTY;
   private isMobileScreen = false;
+  private unsubscribeForeground?: () => void;
 
   get isOver(): boolean {
     return this.isMobileScreen;
@@ -51,6 +55,9 @@ export class FullComponent implements OnInit {
     private settings: CoreService,
     private router: Router,
     private breakpointObserver: BreakpointObserver,
+    private authService: AuthService,
+    private notificacionService: NotificacionService,
+    private firebaseMessaging: FirebaseMessagingService,
   ) {
     this.layoutChangesSubscription = this.breakpointObserver
       .observe([MOBILE_VIEW])
@@ -66,9 +73,24 @@ export class FullComponent implements OnInit {
       });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    const state = this.authService.getCurrentAuthState();
+
+    if (state.id_usuario) {
+      void this.firebaseMessaging.solicitarPermisoYRegistrarToken(state.id_usuario);
+    }
+
+    if (state.id_taller) {
+      this.notificacionService.iniciarPolling(state.id_taller);
+      this.unsubscribeForeground = this.firebaseMessaging.escucharMensajesForeground(
+        state.id_taller
+      );
+    }
+  }
 
   ngOnDestroy() {
+    this.unsubscribeForeground?.();
+    this.notificacionService.detenerPolling();
     this.layoutChangesSubscription.unsubscribe();
   }
 
