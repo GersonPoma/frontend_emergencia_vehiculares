@@ -28,6 +28,14 @@ export const navItems: NavItem[] = [
     route: '/perfiles/servicios',
   },
   {
+    navCap: 'Talleres',
+  },
+  {
+    displayName: 'Historial',
+    iconName: 'solar:history-line-duotone',
+    route: '/talleres/historial',
+  },
+  {
     navCap: 'Notificaciones',
   },
   {

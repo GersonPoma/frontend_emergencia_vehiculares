@@ -44,6 +44,10 @@
           </div>
           <div class="notif-drop-actions">
             <button mat-stroked-button color="primary" class="btn-action"
+              (click)="verIncidente(asig, $event)">
+              Ver incidente
+            </button>
+            <button mat-stroked-button color="primary" class="btn-action"
               (click)="aceptar(asig, $event)">
               Aceptar
             </button>

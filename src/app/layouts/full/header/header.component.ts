@@ -81,7 +81,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.notificacionService.eliminarLocal(asig.id);
-          this.router.navigate(['/ordenes-servicio']);
+          this.router.navigate(['/talleres/historial']);
         },
         error: () => {},
       });
@@ -96,6 +96,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
         next: () => this.notificacionService.eliminarLocal(asig.id),
         error: () => {},
       });
+  }
+
+  verIncidente(asig: AsignacionPendiente, event: Event): void {
+    event.stopPropagation();
+    void this.router.navigate(['/notificaciones'], {
+      queryParams: { incidente: asig.incidente_id },
+    });
   }
 
   cerrarSesion(): void {

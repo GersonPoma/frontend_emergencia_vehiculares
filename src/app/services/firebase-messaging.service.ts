@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { initializeApp, getApps } from 'firebase/app';
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import { getMessaging, getToken, onMessage, MessagePayload } from 'firebase/messaging';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { take } from 'rxjs/operators';
@@ -49,19 +49,41 @@ export class FirebaseMessagingService {
   escucharMensajesForeground(tallerId: number): () => void {
     return onMessage(this.messaging, payload => {
       this.reproducirSonidoForeground();
+      const incidenteId = this.extraerIncidenteId(payload);
       const title = payload.notification?.title ?? 'Nueva emergencia';
       const body = payload.notification?.body ?? '';
       const message = body ? `${title}: ${body}` : title;
-      this.snackBar.open(message, 'Ver', {
+      this.snackBar.open(message, 'Ver incidente', {
         duration: 6000,
         horizontalPosition: 'end',
         verticalPosition: 'top',
         panelClass: ['fcm-snackbar']
       }).onAction().pipe(take(1)).subscribe(() => {
+        if (incidenteId) {
+          void this.router.navigate(['/notificaciones'], {
+            queryParams: { incidente: incidenteId }
+          });
+          return;
+        }
+
         void this.router.navigate(['/notificaciones']);
       });
       this.notificacionService.cargarPendientes(tallerId).subscribe();
     });
+  }
+
+  private extraerIncidenteId(payload: MessagePayload): number | null {
+    const rawId =
+      payload.data?.['incidente_id'] ??
+      payload.data?.['incidenteId'] ??
+      payload.data?.['id_incidente'];
+
+    if (!rawId) return null;
+
+    const incidenteId = Number(rawId);
+    if (!Number.isInteger(incidenteId) || incidenteId <= 0) return null;
+
+    return incidenteId;
   }
 
   private inicializarUnlockDeAudio(): void {

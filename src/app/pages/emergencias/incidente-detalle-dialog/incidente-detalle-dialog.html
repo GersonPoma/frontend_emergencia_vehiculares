@@ -1,0 +1,165 @@
+<h2 mat-dialog-title>Incidente #{{ data.incidenteId }}</h2>
+
+<mat-dialog-content class="dialog-content">
+  @if (isLoading) {
+    <div class="loading-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando incidente...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ errorMessage }}</p>
+      <button mat-stroked-button color="primary" (click)="cargarDetalle()">Reintentar</button>
+    </div>
+  } @else if (incidente) {
+    <section class="resumen">
+      <div class="chips">
+        <span class="chip chip-estado" [class]="'chip chip-estado estado-' + claseEstado(incidente.estado)">
+          {{ incidente.estado }}
+        </span>
+        <span class="chip chip-prioridad" [class]="'chip chip-prioridad prioridad-' + claseEstado(incidente.prioridad)">
+          Prioridad {{ incidente.prioridad }}
+        </span>
+      </div>
+
+      <div class="datos-grid">
+        <div class="dato-item">
+          <span class="label">Fecha</span>
+          <span>{{ incidente.fecha_hora | date:'dd/MM/yyyy HH:mm' }}</span>
+        </div>
+        <div class="dato-item">
+          <span class="label">Ubicación</span>
+          <span>{{ incidente.latitud }}, {{ incidente.longitud }}</span>
+        </div>
+      </div>
+
+      @if (mapaEmbedUrl) {
+        <div class="mapa-embed-wrapper">
+          <iframe
+            class="mapa-embed"
+            [src]="mapaEmbedUrl"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            title="Ubicacion del incidente">
+          </iframe>
+        </div>
+      }
+
+      <div class="mapa-actions">
+        <button mat-flat-button color="primary" (click)="abrirMapa()">
+          <mat-icon>map</mat-icon>
+          Abrir en Google Maps
+        </button>
+      </div>
+    </section>
+
+    <mat-divider></mat-divider>
+
+    <section class="evidencias">
+      <h3>Evidencias</h3>
+
+      @if (evidencias.length === 0) {
+        <p class="sin-evidencias">Este incidente no tiene evidencias registradas.</p>
+      } @else {
+        @if (evidenciasFoto.length > 0) {
+          <div class="evidencia-seccion">
+            <div class="seccion-header">
+              <div class="seccion-title">
+                <mat-icon>photo_camera</mat-icon>
+                <h4>Fotos</h4>
+              </div>
+              <span class="seccion-count">{{ evidenciasFoto.length }}</span>
+            </div>
+
+            <div class="evidencias-lista">
+              @for (evidencia of evidenciasFoto; track trackByEvidenciaId($index, evidencia)) {
+                <article class="evidencia-item">
+                  <div class="evidencia-header">
+                    <span class="tipo">Foto</span>
+                    <span class="fecha">{{ evidencia.fecha | date:'dd/MM/yyyy' }}</span>
+                  </div>
+
+                  @if (tieneUrl(evidencia)) {
+                    <img class="preview-image" [src]="evidencia.url!" alt="Evidencia fotografica" />
+                  } @else {
+                    <p class="archivo-no-disponible">Imagen no disponible.</p>
+                  }
+                </article>
+              }
+            </div>
+          </div>
+        }
+
+        @if (evidenciasAudio.length > 0) {
+          <div class="evidencia-seccion">
+            <div class="seccion-header">
+              <div class="seccion-title">
+                <mat-icon>graphic_eq</mat-icon>
+                <h4>Audios</h4>
+              </div>
+              <span class="seccion-count">{{ evidenciasAudio.length }}</span>
+            </div>
+
+            <div class="evidencias-lista">
+              @for (evidencia of evidenciasAudio; track trackByEvidenciaId($index, evidencia)) {
+                <article class="evidencia-item evidencia-audio-item">
+                  <div class="evidencia-header">
+                    <span class="tipo">Audio</span>
+                    <span class="fecha">{{ evidencia.fecha | date:'dd/MM/yyyy' }}</span>
+                  </div>
+
+                  @if (tieneUrl(evidencia)) {
+                    <audio class="audio-player" controls preload="none" crossorigin="anonymous">
+                      <source [src]="evidencia.url!" />
+                      Tu navegador no soporta audio HTML5.
+                    </audio>
+
+                    <a [href]="evidencia.url!" target="_blank" rel="noopener noreferrer">
+                      Abrir audio en nueva pestaña
+                    </a>
+                  } @else {
+                    <p class="archivo-no-disponible">Audio no disponible.</p>
+                  }
+                </article>
+              }
+            </div>
+          </div>
+        }
+
+        @if (evidenciasTexto.length > 0) {
+          <div class="evidencia-seccion">
+            <div class="seccion-header">
+              <div class="seccion-title">
+                <mat-icon>notes</mat-icon>
+                <h4>Texto</h4>
+              </div>
+              <span class="seccion-count">{{ evidenciasTexto.length }}</span>
+            </div>
+
+            <div class="evidencias-lista">
+              @for (evidencia of evidenciasTexto; track trackByEvidenciaId($index, evidencia)) {
+                <article class="evidencia-item">
+                  <div class="evidencia-header">
+                    <span class="tipo">Texto</span>
+                    <span class="fecha">{{ evidencia.fecha | date:'dd/MM/yyyy' }}</span>
+                  </div>
+
+                  @if (tieneUrl(evidencia)) {
+                    <p class="texto-evidencia">{{ evidencia.url }}</p>
+                  } @else {
+                    <p class="archivo-no-disponible">Texto no disponible.</p>
+                  }
+                </article>
+              }
+            </div>
+          </div>
+        }
+      }
+    </section>
+  }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cerrar()">Cerrar</button>
+</mat-dialog-actions>

@@ -63,6 +63,11 @@ export const routes: Routes = [
           import('./pages/notificaciones/notificaciones').then((m) => m.NotificacionesComponent),
         data: { title: 'Notificaciones' }
       },
+      {
+        path: 'talleres',
+        loadChildren: () =>
+          import('./pages/talleres/talleres.routes').then((m) => m.TalleresRoutes),
+      },
     ],
   },
   {

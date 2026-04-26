@@ -1,0 +1,76 @@
+<mat-card>
+  <mat-card-header>
+    <div class="hist-header">
+      <mat-card-title>
+        <mat-icon>history</mat-icon>
+        Historial de Incidentes
+      </mat-card-title>
+      @if (totalRegistros > 0) {
+        <span class="badge-total">{{ totalRegistros }} atendidos</span>
+      }
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (isLoading) {
+      <div class="loading-state">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+    } @else if (aceptadas.length === 0) {
+      <div class="empty-state">
+        <mat-icon>assignment_late</mat-icon>
+        <p>No hay incidentes atendidos aún</p>
+      </div>
+    } @else {
+      <div class="table-scroll-wrapper">
+        <table mat-table [dataSource]="aceptadas">
+
+          <ng-container matColumnDef="incidente_id">
+            <th mat-header-cell *matHeaderCellDef># Incidente</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="incidente-id">#{{ row.incidente_id }}</span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="distancia_km">
+            <th mat-header-cell *matHeaderCellDef>Distancia</th>
+            <td mat-cell *matCellDef="let row">
+              {{ row.distancia_km | number:'1.1-1' }} km
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="estado">
+            <th mat-header-cell *matHeaderCellDef>Estado</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="estado-chip estado-{{ row.estado | lowercase }}">
+                {{ row.estado }}
+              </span>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let row">
+              <button mat-stroked-button color="primary" (click)="verIncidente(row)">
+                <mat-icon>info_outline</mat-icon>
+                Ver incidente
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <mat-paginator
+        [length]="totalRegistros"
+        [pageSize]="limite"
+        [pageIndex]="paginaActual"
+        [pageSizeOptions]="[10]"
+        (page)="onPaginar($event)"
+        showFirstLastButtons>
+      </mat-paginator>
+    }
+  </mat-card-content>
+</mat-card>
