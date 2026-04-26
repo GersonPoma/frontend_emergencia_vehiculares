@@ -11,24 +11,8 @@ import { Servicio } from '../../../../models/perfiles/servicio.model';
   selector: 'app-eliminar-servicio',
   standalone: true,
   imports: [MatButtonModule, MatDialogModule, MatProgressSpinnerModule],
-  template: `
-    <h2 mat-dialog-title>Eliminar Servicio</h2>
-    <mat-dialog-content>
-      <p>¿Estás seguro de que deseas eliminar el servicio
-        <strong>{{ data.servicio.nombre }}</strong>?
-      </p>
-      <p style="color:#999; font-size:13px;">Esta acción no se puede deshacer.</p>
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button (click)="cancelar()">Cancelar</button>
-      <button mat-flat-button color="warn" (click)="confirmar()" [disabled]="isLoading">
-        @if (isLoading) {
-          <mat-spinner diameter="18" style="display:inline-block; margin-right:6px;"></mat-spinner>
-        }
-        Eliminar
-      </button>
-    </mat-dialog-actions>
-  `
+  templateUrl: './eliminar-servicio.html',
+  styleUrl: './eliminar-servicio.scss',
 })
 export class EliminarServicioComponent implements OnDestroy {
   isLoading = false;
