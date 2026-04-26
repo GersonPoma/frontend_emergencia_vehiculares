@@ -38,7 +38,7 @@ import { EliminarServicioComponent } from './eliminar-servicio/eliminar-servicio
   styleUrl: './servicio.scss'
 })
 export class ServicioComponent implements OnInit, OnDestroy {
-  displayedColumns: string[] = ['id', 'tipo_servicio', 'precio', 'acciones'];
+  displayedColumns: string[] = ['id', 'nombre', 'categoria', 'precio', 'acciones'];
   dataSource: Servicio[] = [];
   isMobile = false;
 
@@ -75,8 +75,8 @@ export class ServicioComponent implements OnInit, OnDestroy {
       .subscribe(result => {
         this.isMobile = result.matches;
         this.displayedColumns = result.matches
-          ? ['tipo_servicio', 'precio', 'acciones']
-          : ['id', 'tipo_servicio', 'precio', 'acciones'];
+          ? ['nombre', 'precio', 'acciones']
+          : ['id', 'nombre', 'categoria', 'precio', 'acciones'];
       });
 
     this.loadServicios();

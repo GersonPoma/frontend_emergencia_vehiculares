@@ -15,7 +15,7 @@ import { Servicio } from '../../../../models/perfiles/servicio.model';
     <h2 mat-dialog-title>Eliminar Servicio</h2>
     <mat-dialog-content>
       <p>¿Estás seguro de que deseas eliminar el servicio
-        <strong>{{ data.servicio.tipo_servicio }}</strong>?
+        <strong>{{ data.servicio.nombre }}</strong>?
       </p>
       <p style="color:#999; font-size:13px;">Esta acción no se puede deshacer.</p>
     </mat-dialog-content>

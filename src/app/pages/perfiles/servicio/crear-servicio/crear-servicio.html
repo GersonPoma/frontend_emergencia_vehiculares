@@ -4,10 +4,22 @@
   <form [formGroup]="form" style="display:flex; flex-direction:column; gap:4px; padding-top:8px;">
 
     <mat-form-field appearance="outline">
-      <mat-label>Tipo de Servicio</mat-label>
-      <input matInput formControlName="tipo_servicio" />
-      @if (f['tipo_servicio'].errors?.['required'] && f['tipo_servicio'].touched) {
-        <mat-error>El tipo de servicio es requerido</mat-error>
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" />
+      @if (f['nombre'].errors?.['required'] && f['nombre'].touched) {
+        <mat-error>El nombre es requerido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Categoría</mat-label>
+      <mat-select formControlName="categoria">
+        @for (cat of categorias; track cat) {
+          <mat-option [value]="cat">{{ cat }}</mat-option>
+        }
+      </mat-select>
+      @if (f['categoria'].errors?.['required'] && f['categoria'].touched) {
+        <mat-error>La categoría es requerida</mat-error>
       }
     </mat-form-field>
 

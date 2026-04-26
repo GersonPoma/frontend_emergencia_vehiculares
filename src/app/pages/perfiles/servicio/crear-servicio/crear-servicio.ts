@@ -3,6 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -19,6 +20,7 @@ import { Servicio, ServicioCrear, ServicioActualizar } from '../../../../models/
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
+    MatSelectModule,
     MatButtonModule,
     MatDialogModule,
     MatProgressSpinnerModule
@@ -29,8 +31,11 @@ export class CrearServicioComponent implements OnInit, OnDestroy {
   isLoading = false;
   isEditing: boolean;
 
+  categorias = ['Motor', 'Choque', 'Llanta', 'Bateria', 'Otros'];
+
   form = new FormGroup({
-    tipo_servicio: new FormControl('', [Validators.required]),
+    nombre: new FormControl('', [Validators.required]),
+    categoria: new FormControl('', [Validators.required]),
     precio: new FormControl<number | null>(null, [Validators.required, Validators.min(0)])
   });
 
@@ -48,7 +53,8 @@ export class CrearServicioComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.isEditing && this.data.servicio) {
       this.form.patchValue({
-        tipo_servicio: this.data.servicio.tipo_servicio,
+        nombre: this.data.servicio.nombre,
+        categoria: this.data.servicio.categoria,
         precio: this.data.servicio.precio
       });
     }
@@ -67,7 +73,8 @@ export class CrearServicioComponent implements OnInit, OnDestroy {
 
     if (this.isEditing) {
       const data: ServicioActualizar = {
-        tipo_servicio: this.form.value.tipo_servicio!,
+        nombre: this.form.value.nombre!,
+        categoria: this.form.value.categoria!,
         precio: this.form.value.precio!
       };
       const url = this.configService.getApiUrl('servicios-taller');
@@ -79,7 +86,8 @@ export class CrearServicioComponent implements OnInit, OnDestroy {
         });
     } else {
       const data: ServicioCrear = {
-        tipo_servicio: this.form.value.tipo_servicio!,
+        nombre: this.form.value.nombre!,
+        categoria: this.form.value.categoria!,
         precio: this.form.value.precio!,
         taller_id: this.data.tallerId
       };
