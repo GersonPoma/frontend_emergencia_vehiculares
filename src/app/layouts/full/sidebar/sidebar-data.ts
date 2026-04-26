@@ -36,6 +36,11 @@ export const navItems: NavItem[] = [
     route: '/talleres/historial',
   },
   {
+    displayName: 'Órdenes de Servicio',
+    iconName: 'solar:document-text-line-duotone',
+    route: '/talleres/ordenes-servicio',
+  },
+  {
     navCap: 'Notificaciones',
   },
   {

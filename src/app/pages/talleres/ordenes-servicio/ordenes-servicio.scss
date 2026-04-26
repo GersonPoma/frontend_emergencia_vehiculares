@@ -1,0 +1,103 @@
+.os-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 8px 16px;
+
+  mat-card-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+
+    mat-icon {
+      color: #1976d2;
+    }
+  }
+}
+
+.badge-total {
+  background: #e3f2fd;
+  color: #1976d2;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 12px;
+  padding: 2px 10px;
+  line-height: 1.5;
+}
+
+.loading-state {
+  display: flex;
+  justify-content: center;
+  padding: 48px 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 48px 16px;
+  color: #999;
+
+  mat-icon {
+    font-size: 56px;
+    width: 56px;
+    height: 56px;
+    color: #ccc;
+  }
+
+  p {
+    margin-top: 12px;
+    font-size: 15px;
+  }
+}
+
+.orden-id {
+  font-weight: 600;
+  color: #546e7a;
+}
+
+.incidente-id {
+  font-weight: 600;
+  color: #1976d2;
+}
+
+.table-scroll-wrapper {
+  overflow-x: auto;
+}
+
+.estado-chip {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+
+  &.estado-pendiente {
+    background: #fff3e0;
+    color: #e65100;
+  }
+
+  &.estado-en_proceso {
+    background: #e3f2fd;
+    color: #1565c0;
+  }
+
+  &.estado-completado {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.estado-cancelado {
+    background: #fce4ec;
+    color: #c62828;
+  }
+}
+
+@media (max-width: 600px) {
+  .os-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 8px;
+  }
+}

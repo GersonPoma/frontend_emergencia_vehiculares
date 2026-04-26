@@ -9,4 +9,12 @@ export const TalleresRoutes: Routes = [
       ),
     data: { title: 'Historial de Incidentes' },
   },
+  {
+    path: 'ordenes-servicio',
+    loadComponent: () =>
+      import('./ordenes-servicio/ordenes-servicio').then(
+        (m) => m.OrdenesServicioComponent
+      ),
+    data: { title: 'Órdenes de Servicio' },
+  },
 ];
