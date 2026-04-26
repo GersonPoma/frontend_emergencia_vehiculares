@@ -76,7 +76,7 @@ export class NotificacionesComponent implements OnInit, OnDestroy {
       .subscribe({
         next: () => {
           this.notificacionService.eliminarLocal(asig.id);
-          this.router.navigate(['/ordenes-servicio']);
+          this.router.navigate(['/talleres/historial']);
         },
         error: () => {},
       });
