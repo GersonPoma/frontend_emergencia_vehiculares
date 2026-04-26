@@ -67,6 +67,7 @@
 .acciones-cell {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 
   button {
     font-size: 12px;
@@ -86,6 +87,7 @@
 
   .acciones-cell {
     flex-direction: column;
-    gap: 4px;
+    align-items: stretch;
+    gap: 6px;
   }
 }
