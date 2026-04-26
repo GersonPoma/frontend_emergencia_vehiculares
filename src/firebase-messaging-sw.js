@@ -13,8 +13,9 @@ firebase.initializeApp({
 const messaging = firebase.messaging();
 
 messaging.onBackgroundMessage(payload => {
-  const title = payload.notification?.title ?? 'Nueva emergencia';
-  const body = payload.notification?.body ?? '';
+  console.log('[SW] payload completo:', JSON.stringify(payload));
+  const title = payload.data?.titulo ?? 'Nueva emergencia';
+  const body = payload.data?.cuerpo ?? '';
 
   self.registration.showNotification(title, {
     body,

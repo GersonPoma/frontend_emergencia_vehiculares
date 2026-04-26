@@ -50,8 +50,8 @@ export class FirebaseMessagingService {
     return onMessage(this.messaging, payload => {
       this.reproducirSonidoForeground();
       const incidenteId = this.extraerIncidenteId(payload);
-      const title = payload.notification?.title ?? 'Nueva emergencia';
-      const body = payload.notification?.body ?? '';
+      const title = payload.data?.['titulo'] ?? 'Nueva emergencia';
+      const body = payload.data?.['cuerpo'] ?? '';
       const message = body ? `${title}: ${body}` : title;
       this.snackBar.open(message, 'Ver incidente', {
         duration: 6000,
