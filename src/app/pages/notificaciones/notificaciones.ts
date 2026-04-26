@@ -6,7 +6,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
-import { MatChipsModule } from '@angular/material/chips';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
@@ -25,7 +24,6 @@ import { AsignacionPendiente } from '../../models/asignacion-pendiente.model';
     MatButtonModule,
     MatDividerModule,
     MatTableModule,
-    MatChipsModule,
   ],
   templateUrl: './notificaciones.html',
   styleUrl: './notificaciones.scss',
@@ -61,7 +59,7 @@ export class NotificacionesComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this.destroy$))
       .subscribe({
         next: () => {
-          this.notificacionService.eliminarLocal(asig.id);
+          this.notificacionService.aceptar(asig.id);
           this.router.navigate(['/ordenes-servicio']);
         },
         error: () => {},
@@ -73,7 +71,7 @@ export class NotificacionesComponent implements OnInit, OnDestroy {
       .rechazar(asig.id)
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: () => this.notificacionService.eliminarLocal(asig.id),
+        next: () => this.notificacionService.rechazar(asig.id),
         error: () => {},
       });
   }
