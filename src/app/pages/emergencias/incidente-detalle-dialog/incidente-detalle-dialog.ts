@@ -6,12 +6,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { Observable, Subject, forkJoin } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable, Subject, forkJoin, of } from 'rxjs';
+import { takeUntil, catchError } from 'rxjs/operators';
 import { ApiService } from 'src/app/services/api.service';
 import { ConfigService } from 'src/app/services/config.service';
 import { Incidente } from 'src/app/models/emergencias/incidente.model';
 import { Evidencia } from 'src/app/models/emergencias/evidencia.model';
+import { Analisis } from 'src/app/models/ia/analisis.model';
 import { Pagination } from 'src/app/models/pagination.model';
 
 interface IncidenteDetalleDialogData {
@@ -39,6 +40,7 @@ export class IncidenteDetalleDialogComponent implements OnInit, OnDestroy {
 
   incidente: Incidente | null = null;
   evidencias: Evidencia[] = [];
+  analisis: Analisis | null = null;
   mapaEmbedUrl: SafeResourceUrl | null = null;
 
   get evidenciasFoto(): Evidencia[] {
@@ -80,12 +82,14 @@ export class IncidenteDetalleDialogComponent implements OnInit, OnDestroy {
     forkJoin({
       incidente: this.obtenerIncidentePorId(this.data.incidenteId),
       evidenciasPage: this.obtenerEvidenciasPorIncidente(this.data.incidenteId, 1, 50),
+      analisis: this.obtenerAnalisisPorIncidente(this.data.incidenteId).pipe(catchError(() => of(null))),
     })
       .pipe(takeUntil(this.destroy$))
       .subscribe({
-        next: ({ incidente, evidenciasPage }) => {
+        next: ({ incidente, evidenciasPage, analisis }) => {
           this.incidente = incidente;
           this.evidencias = evidenciasPage.datos;
+          this.analisis = analisis;
           this.mapaEmbedUrl = this.construirMapaEmbedUrl(
             incidente.latitud,
             incidente.longitud
@@ -118,6 +122,11 @@ export class IncidenteDetalleDialogComponent implements OnInit, OnDestroy {
   ): Observable<Pagination<Evidencia>> {
     const url = this.configService.getApiUrl(`evidencias/incidente/${incidenteId}`);
     return this.apiService.getWithPagination<Evidencia>(url, pagina, limite);
+  }
+
+  private obtenerAnalisisPorIncidente(incidenteId: number): Observable<Analisis> {
+    const url = this.configService.getApiUrl(`ia/analisis/incidente`);
+    return this.apiService.getById<Analisis>(url, incidenteId);
   }
 
   private construirMapaEmbedUrl(latitud: number, longitud: number): SafeResourceUrl {

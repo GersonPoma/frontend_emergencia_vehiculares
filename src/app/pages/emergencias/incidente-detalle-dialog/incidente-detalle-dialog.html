@@ -127,6 +127,36 @@
           </div>
         }
 
+        @if (analisis) {
+          <div class="evidencia-seccion analisis-ia-seccion">
+            <div class="seccion-header">
+              <div class="seccion-title">
+                <mat-icon>smart_toy</mat-icon>
+                <h4>Análisis IA</h4>
+              </div>
+            </div>
+
+            <div class="analisis-grid">
+              <div class="analisis-campo">
+                <span class="label">Categoría del problema</span>
+                <span class="analisis-valor">{{ analisis.categoria_problema }}</span>
+              </div>
+              <div class="analisis-campo">
+                <span class="label">Daños identificados</span>
+                <span class="analisis-valor">{{ analisis.danios_identificados }}</span>
+              </div>
+              <div class="analisis-campo analisis-campo-full">
+                <span class="label">Transcripción de audio</span>
+                <span class="analisis-valor">{{ analisis.transcripcion_audio }}</span>
+              </div>
+              <div class="analisis-campo analisis-campo-full">
+                <span class="label">Resumen estructurado</span>
+                <span class="analisis-valor">{{ analisis.resumen_estructurado }}</span>
+              </div>
+            </div>
+          </div>
+        }
+
         @if (evidenciasTexto.length > 0) {
           <div class="evidencia-seccion">
             <div class="seccion-header">

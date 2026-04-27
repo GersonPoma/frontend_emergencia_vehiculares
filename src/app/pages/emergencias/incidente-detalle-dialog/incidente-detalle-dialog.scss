@@ -222,6 +222,43 @@
   width: 100%;
 }
 
+.analisis-ia-seccion {
+  background: #f3f8ff;
+  border: 1px solid #bbdefb;
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.analisis-ia-seccion .seccion-title mat-icon {
+  color: #7b1fa2;
+}
+
+.analisis-ia-seccion .seccion-title h4 {
+  color: #4a148c;
+}
+
+.analisis-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.analisis-campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.analisis-campo-full {
+  grid-column: 1 / -1;
+}
+
+.analisis-valor {
+  font-size: 13px;
+  color: #212121;
+  line-height: 1.5;
+}
+
 .archivo-no-disponible {
   margin: 0;
   color: #6b7280;
@@ -237,5 +274,17 @@
 
   .mapa-embed {
     height: 220px;
+  }
+
+  .analisis-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .analisis-campo-full {
+    grid-column: 1;
+  }
+
+  .analisis-ia-seccion {
+    padding: 10px;
   }
 }
