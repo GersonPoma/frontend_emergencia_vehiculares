@@ -65,6 +65,20 @@
             </td>
           </ng-container>
 
+          <ng-container matColumnDef="acciones">
+            <th mat-header-cell *matHeaderCellDef>Acciones</th>
+            <td mat-cell *matCellDef="let row">
+              @if (row.estado !== ESTADO_FINALIZADO) {
+                <button mat-stroked-button color="primary"
+                  matTooltip="Generar orden de pago"
+                  (click)="generarOrdenPago(row)">
+                  <mat-icon>receipt</mat-icon>
+                  <span class="btn-texto">Generar Orden de Pago</span>
+                </button>
+              }
+            </td>
+          </ng-container>
+
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>

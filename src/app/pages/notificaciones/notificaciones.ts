@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTableModule } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { Subject } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../services/auth.service';
@@ -26,6 +27,7 @@ import { IncidenteDetalleDialogComponent } from '../emergencias/incidente-detall
     MatButtonModule,
     MatDividerModule,
     MatTableModule,
+    MatTooltipModule,
   ],
   templateUrl: './notificaciones.html',
   styleUrl: './notificaciones.scss',

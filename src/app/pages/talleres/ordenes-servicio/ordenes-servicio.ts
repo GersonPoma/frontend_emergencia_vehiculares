@@ -6,11 +6,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from '../../../services/auth.service';
 import { ApiService } from '../../../services/api.service';
 import { ConfigService } from '../../../services/config.service';
+import { GenerarOrdenPagoDialogComponent } from './generar-orden-pago-dialog/generar-orden-pago-dialog';
 
 export interface OrdenServicio {
   id: number;
@@ -36,12 +40,17 @@ export interface OrdenServicio {
     MatTableModule,
     MatPaginatorModule,
     MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatTooltipModule,
+    MatDialogModule,
   ],
   templateUrl: './ordenes-servicio.html',
   styleUrl: './ordenes-servicio.scss',
 })
 export class OrdenesServicioComponent implements OnInit, OnDestroy {
-  displayedColumns = ['id', 'incidente_id', 'nombre_cliente', 'fecha_hora', 'tiempo_estimado_llegada', 'estado'];
+  readonly ESTADO_FINALIZADO = 'Finalizado';
+
+  displayedColumns = ['id', 'incidente_id', 'nombre_cliente', 'fecha_hora', 'tiempo_estimado_llegada', 'estado', 'acciones'];
 
   ordenes: OrdenServicio[] = [];
   isLoading = false;
@@ -56,6 +65,8 @@ export class OrdenesServicioComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private apiService: ApiService,
     private configService: ConfigService,
+    private snackBar: MatSnackBar,
+    private dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
@@ -91,5 +102,20 @@ export class OrdenesServicioComponent implements OnInit, OnDestroy {
   onPaginar(event: PageEvent): void {
     this.paginaActual = event.pageIndex;
     this.cargar();
+  }
+
+  generarOrdenPago(orden: OrdenServicio): void {
+    const ref = this.dialog.open(GenerarOrdenPagoDialogComponent, {
+      width: '580px',
+      maxWidth: '95vw',
+      data: { ordenId: orden.id, tallerId: this.tallerId },
+    });
+
+    ref.afterClosed().pipe(takeUntil(this.destroy$)).subscribe((ok) => {
+      if (ok) {
+        this.snackBar.open('Orden de pago generada correctamente', 'Cerrar', { duration: 3000 });
+        this.cargar();
+      }
+    });
   }
 }

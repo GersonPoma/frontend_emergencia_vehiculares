@@ -64,6 +64,10 @@
   }
 }
 
+.table-scroll-wrapper {
+  overflow-x: auto;
+}
+
 .acciones-cell {
   display: flex;
   gap: 8px;
@@ -89,5 +93,9 @@
     flex-direction: column;
     align-items: stretch;
     gap: 6px;
+  }
+
+  .btn-texto {
+    display: none;
   }
 }

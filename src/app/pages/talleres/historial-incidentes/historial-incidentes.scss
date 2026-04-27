@@ -56,6 +56,10 @@
   color: #1976d2;
 }
 
+.table-scroll-wrapper {
+  overflow-x: auto;
+}
+
 .estado-chip {
   display: inline-block;
   padding: 3px 10px;
@@ -85,5 +89,9 @@
     align-items: flex-start;
     gap: 8px;
     padding: 8px;
+  }
+
+  .btn-texto {
+    display: none;
   }
 }
