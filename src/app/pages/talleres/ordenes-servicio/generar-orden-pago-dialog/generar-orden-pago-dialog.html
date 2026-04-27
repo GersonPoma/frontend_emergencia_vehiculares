@@ -25,28 +25,36 @@
       <p>El taller no tiene servicios registrados.</p>
     </div>
   } @else {
-    <p class="instruccion">Selecciona los servicios brindados en esta orden:</p>
+    <p class="instruccion">
+      <mat-icon>touch_app</mat-icon>
+      Toca un servicio para seleccionarlo
+    </p>
 
     <div class="lista-servicios">
       @for (fila of filas; track fila.servicio.id) {
-        <div class="servicio-item" [class.seleccionado]="fila.seleccionado">
-          <div class="servicio-row">
-            <mat-checkbox [(ngModel)]="fila.seleccionado" color="primary"></mat-checkbox>
-            <div class="servicio-info">
-              <span class="servicio-nombre">{{ fila.servicio.nombre }}</span>
-              <span class="servicio-categoria">{{ fila.servicio.categoria }}</span>
-            </div>
-            <span class="servicio-precio">Bs. {{ fila.servicio.precio | number:'1.2-2' }}</span>
+        <div class="servicio-card" [class.seleccionada]="fila.seleccionado"
+          (click)="fila.seleccionado = !fila.seleccionado"
+          role="button" [attr.aria-pressed]="fila.seleccionado">
+
+          <mat-icon class="check-icon">
+            {{ fila.seleccionado ? 'check_circle' : 'radio_button_unchecked' }}
+          </mat-icon>
+
+          <div class="servicio-info">
+            <span class="servicio-nombre">{{ fila.servicio.nombre }}</span>
+            <span class="servicio-categoria">{{ fila.servicio.categoria }}</span>
           </div>
 
-          @if (fila.seleccionado) {
-            <mat-form-field appearance="outline" class="comentario-field">
-              <mat-label>Comentario (opcional)</mat-label>
-              <input matInput [(ngModel)]="fila.comentario" maxlength="300"
-                placeholder="Ej: revisión completa, cambio de pieza..." />
-            </mat-form-field>
-          }
+          <span class="servicio-precio">Bs. {{ fila.servicio.precio | number:'1.2-2' }}</span>
         </div>
+
+        @if (fila.seleccionado) {
+          <mat-form-field appearance="outline" class="comentario-field">
+            <mat-label>Comentario (opcional)</mat-label>
+            <input matInput [(ngModel)]="fila.comentario" maxlength="300"
+              placeholder="Ej: revisión completa, cambio de pieza..." />
+          </mat-form-field>
+        }
       }
     </div>
 

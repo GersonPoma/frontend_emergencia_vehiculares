@@ -105,7 +105,9 @@
     gap: 8px;
     padding: 8px;
   }
+}
 
+@media (max-width: 960px) {
   .btn-texto {
     display: none;
   }

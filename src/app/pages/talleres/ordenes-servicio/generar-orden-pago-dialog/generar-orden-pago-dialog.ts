@@ -4,7 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -35,8 +34,7 @@ interface ServicioFila {
     MatDialogModule,
     MatButtonModule,
     MatIconModule,
-    MatCheckboxModule,
-    MatFormFieldModule,
+      MatFormFieldModule,
     MatInputModule,
     MatProgressSpinnerModule,
     MatDividerModule,
