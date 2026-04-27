@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://api.ejemplo.com',
-  googleMapsApiKey: 'TU_API_KEY_DE_PRODUCCION',
+  apiBaseUrl: 'https://backend-emergencia-vehiculares.onrender.com',
+  googleMapsApiKey: 'AIzaSyCXdws6gbso34U2o1KqpUnSZlnW3URK8-Q',
   vapidKey: 'BFqwiDlxRijlQ5hNBsRXFILuxdiBDAyOo6XucexX1-GpKLPR_jYpxOwmkdMwqXSvcLr1Ra3gNe4sFzvaajchYx8',
 
   firebaseConfig: {
