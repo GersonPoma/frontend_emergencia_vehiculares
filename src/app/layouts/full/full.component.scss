@@ -1,0 +1,156 @@
+@use "../../../assets/scss/variables" as *;
+
+// ============================================================
+// Main Wrapper - Sidenav Container
+// ============================================================
+.mainWrapper {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+}
+
+// ============================================================
+// Content Wrapper
+// ============================================================
+.contentWrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: hidden;
+  transition: margin-left 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  position: relative;
+  z-index: 1;
+
+  // Flex layout to make body-wrapper fill available space
+  .body-wrapper {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    width: 100%;
+  }
+}
+
+// ============================================================
+// Body Wrapper - Content Area
+// ============================================================
+.body-wrapper {
+  padding: 24px;
+  background-color: $layout-bg;
+  width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 1024px) {
+    padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
+
+  @media (max-width: 480px) {
+    padding: 12px;
+  }
+}
+
+// ============================================================
+// Page Wrapper
+// ============================================================
+.pageWrapper {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  &.maxWidth {
+    max-width: $boxedWidth;
+    margin: 0 auto;
+  }
+
+  @media (max-width: 768px) {
+    max-width: 100%;
+  }
+}
+
+// ============================================================
+// Scrollbar Styling (ngx-scrollbar)
+// ============================================================
+ng-scrollbar {
+  height: 100%;
+  width: 100%;
+
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+// ============================================================
+// Flex Layout (Sidebar internal container)
+// ============================================================
+.flex-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+// ============================================================
+// Sidebar List - Responsive widths
+// ============================================================
+.sidebar-list {
+  &.mdc-list {
+    // Desktop
+    @media (min-width: 1025px) {
+      width: $sidenav-desktop !important;
+    }
+
+    // Tablet
+    @media (min-width: 769px) and (max-width: 1024px) {
+      width: 240px !important;
+      padding: 0 16px !important;
+    }
+
+    // Mobile
+    @media (max-width: 768px) {
+      width: 100% !important;
+      padding: 0 12px !important;
+    }
+  }
+}
+
+// ============================================================
+// Material Sidenav overrides for responsive behavior
+// ============================================================
+.mat-drawer-container {
+  height: 100%;
+  width: 100%;
+}
+
+.mat-sidenav-content {
+  overflow: visible !important;
+}
+
+// Ensure drawer doesn't interfere with layout
+.mat-drawer {
+  box-sizing: border-box;
+}
+
+// Smooth transitions
+.mat-drawer,
+.contentWrapper {
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}

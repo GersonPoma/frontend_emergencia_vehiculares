@@ -1,0 +1,12 @@
+.sidebar-section-divider {
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--mat-sys-outline-variant) 20%,
+    var(--mat-sys-outline-variant) 80%,
+    transparent 100%
+  );
+  margin: 16px 0;
+  display: block;
+}

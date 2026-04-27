@@ -1,0 +1,36 @@
+@use "../variables" as *;
+
+html .topbar {
+  position: relative;
+  height: $header-height;
+  background-color: var(--mat-sys-background);
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  z-index: 100;
+  min-height: $header-height;
+  flex-shrink: 0;
+
+  @media (max-width: 600px) {
+    padding: 0 8px;
+  }
+}
+
+.topbar-dd {
+  min-width: 200px !important;
+
+  @media (max-width: 600px) {
+    min-width: 150px !important;
+  }
+}
+
+.text-hover-primary:hover {
+  .hover-text {
+    color: $primary;
+  }
+}
+
+.object-cover {
+  object-fit: cover;
+}

@@ -1,0 +1,89 @@
+<h2 mat-dialog-title>
+  <mat-icon>receipt</mat-icon>
+  Generar Orden de Pago &nbsp;
+  <span class="orden-ref">#{{ data.ordenId }}</span>
+</h2>
+
+<mat-dialog-content>
+
+  @if (isLoadingServicios) {
+    <div class="center-state">
+      <mat-spinner diameter="40"></mat-spinner>
+      <p>Cargando servicios...</p>
+    </div>
+  } @else if (errorCarga) {
+    <div class="center-state error-state">
+      <mat-icon>error_outline</mat-icon>
+      <p>{{ errorCarga }}</p>
+      <button mat-stroked-button color="warn" (click)="cargarServicios()">
+        Reintentar
+      </button>
+    </div>
+  } @else if (filas.length === 0) {
+    <div class="center-state">
+      <mat-icon>inventory_2</mat-icon>
+      <p>El taller no tiene servicios registrados.</p>
+    </div>
+  } @else {
+    <p class="instruccion">
+      <mat-icon>touch_app</mat-icon>
+      Toca un servicio para seleccionarlo
+    </p>
+
+    <div class="lista-servicios">
+      @for (fila of filas; track fila.servicio.id) {
+        <div class="servicio-card" [class.seleccionada]="fila.seleccionado"
+          (click)="fila.seleccionado = !fila.seleccionado"
+          role="button" [attr.aria-pressed]="fila.seleccionado">
+
+          <mat-icon class="check-icon">
+            {{ fila.seleccionado ? 'check_circle' : 'radio_button_unchecked' }}
+          </mat-icon>
+
+          <div class="servicio-info">
+            <span class="servicio-nombre">{{ fila.servicio.nombre }}</span>
+            <span class="servicio-categoria">{{ fila.servicio.categoria }}</span>
+          </div>
+
+          <span class="servicio-precio">Bs. {{ fila.servicio.precio | number:'1.2-2' }}</span>
+        </div>
+
+        @if (fila.seleccionado) {
+          <mat-form-field appearance="outline" class="comentario-field">
+            <mat-label>Comentario (opcional)</mat-label>
+            <input matInput [(ngModel)]="fila.comentario" maxlength="300"
+              placeholder="Ej: revisión completa, cambio de pieza..." />
+          </mat-form-field>
+        }
+      }
+    </div>
+
+    <mat-divider></mat-divider>
+
+    <div class="resumen">
+      <span class="resumen-label">Servicios seleccionados:</span>
+      <span class="resumen-valor">{{ seleccionados.length }}</span>
+      <span class="resumen-label">Total estimado:</span>
+      <span class="resumen-total">Bs. {{ total | number:'1.2-2' }}</span>
+    </div>
+
+    @if (errorSubmit) {
+      <p class="error-submit">
+        <mat-icon>warning</mat-icon> {{ errorSubmit }}
+      </p>
+    }
+  }
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="cancelar()" [disabled]="isSubmitting">Cancelar</button>
+  <button mat-flat-button color="primary"
+    (click)="generar()"
+    [disabled]="!puedeEnviar || isLoadingServicios">
+    @if (isSubmitting) {
+      <mat-spinner diameter="18" style="display:inline-block; margin-right:6px;"></mat-spinner>
+    }
+    Generar Pago
+  </button>
+</mat-dialog-actions>

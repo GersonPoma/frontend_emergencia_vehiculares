@@ -1,0 +1,143 @@
+<div class="login-container">
+  <div class="login-wrapper">
+    <div class="login-card">
+      <mat-card class="cardWithShadow">
+        <mat-card-content class="p-32">
+
+          <div class="text-center">
+            <span class="mat-subtitle-1 f-w-500 text-muted">Bienvenido a</span>
+            <h2 class="text-primary f-w-600">AutoSOS</h2>
+          </div>
+
+          <h3 class="text-center">Registrar Taller</h3>
+
+          <form [formGroup]="form">
+
+            <p class="mat-subtitle-2 f-w-600 m-b-12">Datos del taller</p>
+
+            <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Nombre</mat-label>
+            <mat-form-field appearance="outline" class="w-100" color="primary">
+              <input matInput formControlName="nombre" placeholder="Ej: Taller García" />
+              @if (f['nombre'].errors?.['required'] && f['nombre'].touched) {
+                <mat-error>El nombre es requerido</mat-error>
+              }
+              @if (f['nombre'].errors?.['minlength'] && f['nombre'].touched) {
+                <mat-error>Mínimo 3 caracteres</mat-error>
+              }
+            </mat-form-field>
+
+            <div class="d-flex gap-2">
+              <div class="w-50">
+                <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Teléfono</mat-label>
+                <mat-form-field appearance="outline" class="w-100" color="primary">
+                  <input matInput formControlName="telefono" placeholder="Ej: 70000000" />
+                  @if (f['telefono'].errors?.['required'] && f['telefono'].touched) {
+                    <mat-error>Requerido</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="w-50">
+                <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Dirección</mat-label>
+                <mat-form-field appearance="outline" class="w-100" color="primary">
+                  <input matInput formControlName="direccion" placeholder="Ej: Av. Principal 123" />
+                  @if (f['direccion'].errors?.['required'] && f['direccion'].touched) {
+                    <mat-error>Requerido</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <button
+              mat-stroked-button
+              type="button"
+              class="w-100 map-location-btn"
+              [color]="ubicacionObtenida ? 'primary' : ''"
+              (click)="abrirMapa()"
+            >
+              @if (ubicacionObtenida) {
+                <ng-container>
+                  <mat-icon>check_circle</mat-icon>
+                  ({{ f['latitud'].value?.toFixed(4) }}, {{ f['longitud'].value?.toFixed(4) }}) — Cambiar
+                </ng-container>
+              } @else {
+                <ng-container>
+                  <mat-icon>map</mat-icon>
+                  Seleccionar ubicación en el mapa
+                </ng-container>
+              }
+            </button>
+
+            @if (f['latitud'].errors?.['required'] && f['latitud'].touched) {
+              <p style="color: #f44336; font-size: 12px; margin: 4px 0 0 16px;">La ubicación es requerida</p>
+            }
+
+            <mat-divider class="m-t-16 m-b-24"></mat-divider>
+
+            <p class="mat-subtitle-2 f-w-600 m-b-12">Cuenta de acceso</p>
+
+            <div class="d-flex gap-2">
+              <div class="w-50">
+                <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Usuario</mat-label>
+                <mat-form-field appearance="outline" class="w-100" color="primary">
+                  <input matInput formControlName="username" placeholder="Nombre de usuario" />
+                  <mat-icon matSuffix>person</mat-icon>
+                  @if (f['username'].errors?.['required'] && f['username'].touched) {
+                    <mat-error>El usuario es requerido</mat-error>
+                  }
+                  @if (f['username'].errors?.['minlength'] && f['username'].touched) {
+                    <mat-error>Mínimo 3 caracteres</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="w-50">
+                <mat-label class="mat-subtitle-2 f-s-14 f-w-600 m-b-12 d-block">Contraseña</mat-label>
+                <mat-form-field appearance="outline" class="w-100" color="primary">
+                  <input
+                    matInput
+                    [type]="hidePassword ? 'password' : 'text'"
+                    formControlName="password"
+                    placeholder="Contraseña"
+                  />
+                  <mat-icon matSuffix (click)="togglePasswordVisibility()" style="cursor:pointer">
+                    {{ hidePassword ? 'visibility_off' : 'visibility' }}
+                  </mat-icon>
+                  @if (f['password'].errors?.['required'] && f['password'].touched) {
+                    <mat-error>La contraseña es requerida</mat-error>
+                  }
+                  @if (f['password'].errors?.['minlength'] && f['password'].touched) {
+                    <mat-error>Mínimo 6 caracteres</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+
+            <button
+              mat-flat-button
+              color="primary"
+              class="w-100 m-t-16"
+              (click)="submit()"
+              [disabled]="form.invalid || isLoading"
+            >
+              @if (!isLoading) { Registrar Taller }
+              @if (isLoading) {
+                <span class="d-flex align-items-center justify-content-center">
+                  <mat-spinner diameter="20" class="m-r-8"></mat-spinner>
+                  Registrando...
+                </span>
+              }
+            </button>
+
+          </form>
+
+          <span class="d-block f-w-500 text-center m-t-24">
+            ¿Ya tienes cuenta?
+            <a routerLink="/login" class="text-decoration-none text-primary f-w-500 f-s-14">
+              Inicia sesión
+            </a>
+          </span>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
