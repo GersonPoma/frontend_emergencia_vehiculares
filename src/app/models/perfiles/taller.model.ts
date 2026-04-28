@@ -15,5 +15,6 @@ export interface TallerSalida {
   direccion: string;
   latitud: number;
   longitud: number;
+  disponible: boolean;
   usuario_id: number;
 }

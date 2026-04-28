@@ -157,3 +157,56 @@
 .logout-button {
   color: #f44336 !important;
 }
+
+.taller-estado-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-right: 8px;
+}
+
+.taller-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+  }
+
+  &.disponible {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.no-disponible {
+    background: #ffebee;
+    color: #c62828;
+  }
+}
+
+.btn-toggle-taller {
+  font-size: 12px;
+  height: 30px;
+  line-height: 30px;
+  padding: 0 12px;
+  min-width: unset;
+}
+
+@media (max-width: 600px) {
+  .taller-chip-texto {
+    display: none;
+  }
+
+  .btn-toggle-taller {
+    padding: 0 8px;
+    font-size: 11px;
+  }
+}

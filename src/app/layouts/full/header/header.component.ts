@@ -22,7 +22,10 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { AuthService } from 'src/app/services/auth.service';
 import { NotificacionService } from 'src/app/services/notificacion.service';
+import { ApiService } from 'src/app/services/api.service';
+import { ConfigService } from 'src/app/services/config.service';
 import { AsignacionPendiente } from 'src/app/models/asignacion-pendiente.model';
+import { TallerSalida } from 'src/app/models/perfiles/taller.model';
 
 @Component({
   selector: 'app-header',
@@ -49,6 +52,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleMobileNav = new EventEmitter<void>();
 
   currentUsername = '';
+  esAdminTaller = false;
+  tallerDisponible: boolean | null = null;
+  isToggling = false;
+  private idTaller: number | null = null;
   private destroy$ = new Subject<void>();
 
   readonly pendientes: Signal<AsignacionPendiente[]>;
@@ -57,7 +64,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
-    private notificacionService: NotificacionService
+    private notificacionService: NotificacionService,
+    private apiService: ApiService,
+    private configService: ConfigService,
   ) {
     this.pendientes = this.notificacionService.pendientes.asReadonly();
     this.cantidadPendientes = this.notificacionService.cantidadPendientes;
@@ -66,6 +75,36 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     const state = this.authService.getCurrentAuthState();
     this.currentUsername = state.username || 'Usuario';
+
+    if (state.rol === 'admin_taller' && state.id_taller) {
+      this.esAdminTaller = true;
+      this.idTaller = state.id_taller;
+      this.cargarEstadoTaller();
+    }
+  }
+
+  cargarEstadoTaller(): void {
+    if (!this.idTaller) return;
+    const url = this.configService.getApiUrl('talleres');
+    this.apiService.getById<TallerSalida>(url, this.idTaller)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({ next: (t) => (this.tallerDisponible = t.disponible) });
+  }
+
+  toggleDisponibilidad(): void {
+    if (!this.idTaller || this.isToggling) return;
+    this.isToggling = true;
+    const action = this.tallerDisponible ? 'desactivar' : 'activar';
+    const url = this.configService.getApiUrl('talleres');
+    this.apiService.patch<TallerSalida>(url, `${this.idTaller}/${action}`, {})
+      .pipe(takeUntil(this.destroy$))
+      .subscribe({
+        next: (t) => {
+          this.tallerDisponible = t.disponible;
+          this.isToggling = false;
+        },
+        error: () => (this.isToggling = false),
+      });
   }
 
   ngOnDestroy(): void {

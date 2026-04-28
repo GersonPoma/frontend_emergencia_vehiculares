@@ -6,6 +6,23 @@
 
   <span class="spacer"></span>
 
+  <!-- Estado del taller (solo admin_taller) -->
+  @if (esAdminTaller && tallerDisponible !== null) {
+    <div class="taller-estado-wrapper">
+      <span class="taller-chip" [class.disponible]="tallerDisponible" [class.no-disponible]="!tallerDisponible">
+        <mat-icon>{{ tallerDisponible ? 'check_circle' : 'cancel' }}</mat-icon>
+        <span class="taller-chip-texto">{{ tallerDisponible ? 'Disponible' : 'No disponible' }}</span>
+      </span>
+      <button mat-stroked-button
+              [color]="tallerDisponible ? 'warn' : 'primary'"
+              class="btn-toggle-taller"
+              [disabled]="isToggling"
+              (click)="toggleDisponibilidad()">
+        {{ tallerDisponible ? 'Desactivar' : 'Activar' }}
+      </button>
+    </div>
+  }
+
   <!-- Campana de emergencias -->
   <button mat-icon-button [matMenuTriggerFor]="notifMenu" class="notif-btn"
     [matBadge]="cantidadPendientes() || null" matBadgeColor="warn" matBadgeSize="small">
