@@ -3,16 +3,19 @@ import { NavItem } from './nav-item/nav-item';
 export const navItems: NavItem[] = [
   {
     navCap: 'Cuentas',
+    roles: ['admin'],
   },
   {
     displayName: 'Usuarios',
     iconName: 'solar:user-id-line-duotone',
     route: '/cuentas/usuarios',
+    roles: ['admin'],
   },
   {
     displayName: 'Roles',
     iconName: 'solar:lock-password-unlocked-line-duotone',
     route: '/cuentas/roles',
+    roles: ['admin'],
   },
   {
     navCap: 'Técnicos',

@@ -104,11 +104,26 @@ export class Autenticacion implements OnInit, OnDestroy {
       .subscribe({
         next: (response) => {
           this.isLoading = false;
+
+          if (response.rol === 'cliente') {
+            this.authService.logout();
+            this.snackBar.open(
+              'Los clientes no usan la plataforma web. Por favor, utiliza la aplicación móvil.',
+              'Entendido',
+              { duration: 6000, panelClass: ['error-snackbar'] }
+            );
+            return;
+          }
+
           this.firebaseMessaging.solicitarPermisoYRegistrarToken(response.id_usuario);
           this.snackBar.open(`¡Bienvenido ${this.form.value.username}!`, 'Cerrar', {
             duration: 3000
           });
-          this.router.navigate(['/cuentas/usuarios']);
+
+          const rutaInicial = (response.rol === 'tecnico' || response.rol === 'admin_taller')
+            ? '/talleres/ordenes-servicio'
+            : '/cuentas/usuarios';
+          this.router.navigate([rutaInicial]);
         },
         error: (error) => {
           this.isLoading = false;

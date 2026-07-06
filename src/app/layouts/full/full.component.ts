@@ -37,7 +37,10 @@ const MOBILE_VIEW = 'screen and (max-width: 991px)';
   encapsulation: ViewEncapsulation.None,
 })
 export class FullComponent implements OnInit {
-  navItems = navItems;
+  get navItems() {
+    const rol = this.authService.getRol() ?? '';
+    return navItems.filter(item => !item.roles || item.roles.includes(rol));
+  }
 
   @ViewChild('leftsidenav')
   public sidenav: MatSidenav;

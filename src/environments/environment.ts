@@ -1,8 +1,8 @@
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://localhost:8000',
+  apiBaseUrl: 'https://backend-emergencia-vehiculares.onrender.com',
   googleMapsApiKey: 'AIzaSyCXdws6gbso34U2o1KqpUnSZlnW3URK8-Q',
-  // Firebase Console → Project Settings → Cloud Messaging → Web push certificates → Key pair
+  
   vapidKey: 'BFqwiDlxRijlQ5hNBsRXFILuxdiBDAyOo6XucexX1-GpKLPR_jYpxOwmkdMwqXSvcLr1Ra3gNe4sFzvaajchYx8',
 
   firebaseConfig: {
