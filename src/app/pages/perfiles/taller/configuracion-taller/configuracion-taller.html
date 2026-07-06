@@ -1,0 +1,133 @@
+<mat-card class="configuracion-card">
+  <mat-card-header>
+    <div class="header-content">
+      <div>
+        <mat-card-title>Configuracion del Taller</mat-card-title>
+        <mat-card-subtitle>Actualiza los datos de contacto, horario, ubicacion y disponibilidad.</mat-card-subtitle>
+      </div>
+    </div>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (isLoading) {
+      <div class="loading-state">
+        <mat-spinner diameter="48"></mat-spinner>
+      </div>
+    } @else {
+      <form [formGroup]="form" class="configuracion-form">
+        <div class="form-grid">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Nombre</mat-label>
+            <input matInput formControlName="nombre" placeholder="Ej: Taller Garcia" />
+            @if (f['nombre'].errors?.['required'] && f['nombre'].touched) {
+              <mat-error>El nombre es requerido</mat-error>
+            }
+            @if (f['nombre'].errors?.['minlength'] && f['nombre'].touched) {
+              <mat-error>Mínimo 3 caracteres</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Telefono</mat-label>
+            <input matInput formControlName="telefono" placeholder="Ej: 70000000" />
+            @if (f['telefono'].errors?.['required'] && f['telefono'].touched) {
+              <mat-error>El telefono es requerido</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Direccion</mat-label>
+            <input matInput formControlName="direccion" placeholder="Ej: Av. Principal 123" />
+            @if (f['direccion'].errors?.['required'] && f['direccion'].touched) {
+              <mat-error>La direccion es requerida</mat-error>
+            }
+          </mat-form-field>
+
+          <div class="time-grid">
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Hora de apertura</mat-label>
+              <input matInput type="time" formControlName="hora_apertura" />
+              @if (f['hora_apertura'].errors?.['required'] && f['hora_apertura'].touched) {
+                <mat-error>La hora de apertura es requerida</mat-error>
+              }
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Hora de cierre</mat-label>
+              <input matInput type="time" formControlName="hora_cierre" />
+              @if (f['hora_cierre'].errors?.['required'] && f['hora_cierre'].touched) {
+                <mat-error>La hora de cierre es requerida</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <div class="location-section">
+          <div class="location-copy">
+            <h3>Ubicacion</h3>
+            <p>Selecciona la posicion exacta del taller para que el sistema lo ubique correctamente.</p>
+          </div>
+
+          <button mat-stroked-button type="button" color="primary" (click)="abrirMapa()">
+            <mat-icon>map</mat-icon>
+            Cambiar ubicacion
+          </button>
+        </div>
+
+        <div class="coordinates-row">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Latitud</mat-label>
+            <input matInput formControlName="latitud" readonly />
+            @if (f['latitud'].errors?.['required'] && f['latitud'].touched) {
+              <mat-error>La latitud es requerida</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Longitud</mat-label>
+            <input matInput formControlName="longitud" readonly />
+            @if (f['longitud'].errors?.['required'] && f['longitud'].touched) {
+              <mat-error>La longitud es requerida</mat-error>
+            }
+          </mat-form-field>
+        </div>
+
+        <mat-divider class="section-divider"></mat-divider>
+
+        <div class="status-row">
+          <mat-checkbox formControlName="disponible">
+            Taller disponible para recibir emergencias
+          </mat-checkbox>
+
+          @if (ubicacionObtenida) {
+            <span class="status-pill">
+              <mat-icon>check_circle</mat-icon>
+              Ubicacion confirmada
+            </span>
+          }
+        </div>
+
+        <div class="action-row">
+          <button
+            mat-flat-button
+            color="primary"
+            type="button"
+            (click)="guardar()"
+            [disabled]="form.invalid || isSaving"
+          >
+            @if (!isSaving) {
+              Guardar cambios
+            } @else {
+              <span class="saving-content">
+                <mat-spinner diameter="18"></mat-spinner>
+                Guardando...
+              </span>
+            }
+          </button>
+        </div>
+      </form>
+    }
+  </mat-card-content>
+</mat-card>

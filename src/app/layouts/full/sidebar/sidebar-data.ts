@@ -44,6 +44,15 @@ export const navItems: NavItem[] = [
     route: '/talleres/ordenes-servicio',
   },
   {
+    navCap: 'Configuracion',
+  },
+  {
+    displayName: 'Configuracion',
+    iconName: 'solar:settings-minimalistic-line-duotone',
+    route: '/perfiles/configuracion',
+    roles: ['admin_taller'],
+  },
+  {
     navCap: 'Notificaciones',
   },
   {

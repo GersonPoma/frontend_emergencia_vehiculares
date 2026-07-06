@@ -15,6 +15,20 @@ export const PerfilesPublicRoutes: Routes = [
 // Rutas protegidas (con sidebar)
 export const PerfilesRoutes: Routes = [
   {
+    path: 'configuracion',
+    loadComponent: () =>
+      import('./taller/configuracion-taller/configuracion-taller').then(
+        (m) => m.ConfiguracionTallerComponent
+      ),
+    data: {
+      title: 'Configuracion del Taller',
+      urls: [
+        { title: 'Perfiles', url: '/perfiles' },
+        { title: 'Configuracion' }
+      ]
+    }
+  },
+  {
     path: 'tecnicos',
     component: TecnicoComponent,
     data: {
